@@ -1,0 +1,45 @@
+Plans for the algorithm:
+
+It will first make all of the authors and papers ect. into entities, 
+it will of course distinguish between papers and authors. It will then proceed
+to link the entities based on references within the entities, authors, coauthors
+etc. to make a graph. It will then search for two authors that may be the same
+with a machine learning algorithm (still unsure what algorithm this may be but
+we will get to that later). It will make this task easier by normalizing all of 
+authors names. After this it will ask to merge these entities and it will draw the
+maximum amount of information out of the two entities. For example it will find 
+all of the papers the author has written and it will merge the name Robert L. D.
+and Robert Diersing into Robert L. Diersing. 
+
+Links I used for research: 
+https://pdfs.semanticscholar.org/35d4/af572e687228a8dd2241f85d7a833fcf5e5d.pdf
+http://nlp.stanford.edu/projects/kbp/
+https://en.wikipedia.org/wiki/Entity_linking
+http://aiweb.cs.washington.edu/ai/pubs/ling-tacl15.pdf
+http://www.eurecom.fr/en/publication/4942/download/data-publi-4942.pdf
+also the book "Machine Learning" by Tom M. Mitchell
+
+Time spent doing research: 6 hours
+Time spend planning algorithm: 1 hour
+
+Name Normalization Algorithm: - makes matching easier
+the algorithm will proceed as follows
+	1. It will block components
+	2. It will re-arrange components to be in alphabetical order
+	3. It will acknowledge an excess or lack of information such as 
+		a) Titles/honorifics
+		b) Abbreviated Initials
+		c) Missing Name components
+		d) Truncated Name components *not sure if this is necessary*
+	4. Derive the phonetic spelling of the name
+	5. Convert the nicknames to standard names via name list
+	
+Links I used for research:
+https://www.rosette.com/function/name-matching/
+https://www.codeproject.com/Articles/37851/NATO-Phonetics
+
+Time spent doing research: 1 hour
+Time spent planning algorithm: 2 hours
+Time spent writing this: 30 min
+
+Total time: 9.5 hours
