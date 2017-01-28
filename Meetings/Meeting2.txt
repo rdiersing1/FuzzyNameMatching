@@ -1,0 +1,22 @@
+I have a busy week coming up so I decided to start working on the project early, here is what I 
+have so far:
+
+Names Testing Set:
+All names in the test set were taken from Wikipedia: https://en.wikipedia.org/wiki/Lists_of_writers
+I copied these lists into a file named NameSet and used the NameSetBuilder that I created to 
+format it so I just had the full names (Plus a few minor adjustments by hand).
+
+Time finding set of names: 30 min
+Time building NameCleaner program: 90 min
+
+Name Disambiguation:
+All names are given to the algorithm in an input file, and the normalized names are output in
+another file along with any information the algorithm gathered. All of the names are ordered 
+with the title first if they have one, then the name components in alphabetical order.
+
+The set of all titles the algorithm will recognize are passed in to the algorithm in a text file
+All text files passed into the algorithm are specified in the config.txt file, which MUST REMAIN
+config.txt (or else the algorithm will not find it).
+
+Time spent on Name Disambiguation(normalization) algorithm so far: 4.5 hours
+Time spent on this document: 30 min
