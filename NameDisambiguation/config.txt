@@ -1,3 +1,4 @@
 input: testSet.txt
 output: result.txt
 titles: titles.txt
+nicknames: NickNames.txt

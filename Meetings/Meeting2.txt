@@ -20,3 +20,9 @@ config.txt (or else the algorithm will not find it).
 
 Time spent on Name Disambiguation(normalization) algorithm so far: 4.5 hours
 Time spent on this document: 30 min
+
+I have now imported a set of all nick names and for every nickname in the set of names, the algorithm
+will recognize that the name block is a nick name and will recommend possible names. (Note may also
+want to include the likeness of substitution). 
+
+Time spent working on this part of the algorithm 2 hours

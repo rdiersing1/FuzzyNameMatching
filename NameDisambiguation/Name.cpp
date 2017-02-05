@@ -3,6 +3,7 @@
 #include <sstream>
 #include <algorithm>
 #include <iostream>
+#include <map>
 
 using namespace std;
 
@@ -35,6 +36,7 @@ string Name::toStr() const {		// outputs a string of the name in the correct for
 	if (title.size() != 0) {		// checks case where there is a title
 		returnSS << title << ". ";
 	}
+
 	for (unsigned i = 0; i < nameBlocks.size(); ++i) {		// prints all of the blocks
 		returnSS << nameBlocks.at(i);
 		if (abbreviated.at(i)) {	// prints a period if the name is abreviated
@@ -50,6 +52,7 @@ string Name::toStr() const {		// outputs a string of the name in the correct for
 	else {
 		returnSS << "None";
 	}
+
 	returnSS << ", Name blocks count: " << nameBlocks.size();	// Prints name block count
 
 	int numAbbreviatedComponents = 0;
@@ -59,12 +62,30 @@ string Name::toStr() const {		// outputs a string of the name in the correct for
 		}
 	}
 	returnSS << ", Abbreviated components count: " << numAbbreviatedComponents  << '}';		// Prints abrivated component count
+
+	if (hasNickName) {
+		returnSS << " [";
+		
+		for (unsigned i = 0; i < possibleNames.size(); ++i) {
+			if (possibleNames.at(i).size() != 0) {
+				returnSS << "Nickname: " << nameBlocks.at(i);
+				returnSS << ", Possible Names:";
+				for (set<string>::iterator it = possibleNames.at(i).begin(); it != possibleNames.at(i).end(); ++it) {
+					returnSS << *it << ' ';
+				}
+			}
+		}
+
+		returnSS << ']';
+	}
+
 	getline(returnSS, s);
 	return s;
 }
 
-Name::Name(string s, const set<string> &titles) {	// constructs a name, sorts name blocks, notes abriviations, and 
+Name::Name(string s, const set<string> &titles, const map<string, set<string> > &nickNames) {	// constructs a name, sorts name blocks, notes abriviations, and 
 	stringstream ss(s);
+	hasNickName = false;
 
 	while (!ss.eof()) {					// parses the string
 		string temp;
@@ -81,8 +102,16 @@ Name::Name(string s, const set<string> &titles) {	// constructs a name, sorts na
 
 	sort(nameBlocks.begin(), nameBlocks.end());			// Sorts the name blocks alphabetically 
 
-	for (unsigned i = 0; i < nameBlocks.size(); ++i) {	// Stores which names are abbreviated in vector of bools
-		if (nameBlocks.at(i).size() == 1) {
+	possibleNames.resize(nameBlocks.size());
+
+	for (unsigned i = 0; i < nameBlocks.size(); ++i) {	
+		if (nickNames.count(nameBlocks.at(i)) != 0) {	// Stores the possible nicknames for a name
+			hasNickName = true;
+			cerr << "Has a nickname" << endl;
+			possibleNames.at(i) = nickNames.find(nameBlocks.at(i))->second;
+		}
+
+		if (nameBlocks.at(i).size() == 1) {				// Stores which names are abbreviated in vector of bools
 			abbreviated.push_back(true);
 		}
 		else {
