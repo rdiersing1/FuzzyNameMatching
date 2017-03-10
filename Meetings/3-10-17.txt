@@ -1,0 +1,8 @@
+I have transferred the name normalizer to java code so that I could use the 
+NLP API for java on java name objects. I then proceded to make a collection of 
+string comparison algorithms using the Stanford NLP API. I then made a overarching
+comparison method which sums all of the smaller comparison algorithms together. It 
+is not yet properly weighted which I hope to fix soon, but with the small test set
+I created all of the instances of the name being searched for had a higher value
+than the other names in the set. I will fix the weighting system on my overall
+comparison algorithm to achieve more contrast between these values. 
