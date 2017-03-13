@@ -29,7 +29,7 @@ public class NameData {
 		try {
 			String currLine = titleFile.readLine();
 			while (currLine != null) {
-				titles.add(currLine);						// adds to set of titles
+				titles.add(currLine.toLowerCase());						// adds to set of titles
 				currLine = titleFile.readLine();
 			}
 		} catch (IOException e) {

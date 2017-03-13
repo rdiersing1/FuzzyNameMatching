@@ -5,4 +5,10 @@ comparison method which sums all of the smaller comparison algorithms together. 
 is not yet properly weighted which I hope to fix soon, but with the small test set
 I created all of the instances of the name being searched for had a higher value
 than the other names in the set. I will fix the weighting system on my overall
-comparison algorithm to achieve more contrast between these values. 
+comparison algorithm to achieve more contrast between these values. - Work 7 hrs
+
+I have made significant improvements to this name comparison algorithm. It will now
+show a different of almost an order of magnitude when two names are clearly different.
+However when two different names have the same surname it has a bit of trouble. For example
+it will rank "Timothy Diersing" higher than "Robert L. D." when searching for "Robert Diersing".
+- Work 4.5 hrs
