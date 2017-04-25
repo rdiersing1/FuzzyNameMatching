@@ -106,5 +106,11 @@ public class Main {
 		
 		System.out.println("Done");
 		System.out.println("");
+		System.out.println("");
+		
+		Name name1 = new Name("Robert Diersing");
+		Name name2 = new Name("Robert L D");
+		System.out.println("COMPAIRSON: ");
+		name1.printCompareStats(name2);
 	}
 }

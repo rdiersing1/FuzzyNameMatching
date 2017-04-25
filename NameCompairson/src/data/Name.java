@@ -18,23 +18,25 @@ public class Name {
 	
 	private String[] blocks;
 	private String[] orderedBlocks;
+	private String[] orderedNameBlocks;
 	private Vector< Set<NamePopularityPair> > nicNames;
+	private Set<Name> coauthors;
 	
 	// Constants
-	private static final double SIMILARITY_MINIMUM = 0.3;
-	
-	private static final double COMPARE_CLASSIC_WEIGHT = 2;
-	private static final double COMPARE_TITLES_WEIGHT = 4;
-	private static final double COMPARE_COMBINATION_WEIGHT = 1;
-	private static final double COMPARE_INITIALS_PERM_WEIGHT = 15;
-	private static final double COMPARE_INITIALS_COMBO_WEIGHT = 14;
+	private static final double SIMILARITY_MINIMUM = 0.4;
+	// Weights
+	private static final double COMPARE_CLASSIC_WEIGHT = 1;
+	private static final double COMPARE_TITLES_WEIGHT = 2;
+	private static final double COMPARE_COMBINATION_WEIGHT = 0;
+	private static final double COMPARE_INITIALS_PERM_WEIGHT = 0;
+	private static final double COMPARE_INITIALS_COMBO_WEIGHT = 2;
 	private static final double CLASSIC_LEV_WEIGHT = 0;
-	private static final double INITIALS_LEV_WEIGHT = 5;
-	private static final double AVE_LEV_WEIGHT = 5;
-	private static final double ORDERED_LEV_WEIGHT = 5;
-	private static final double BBBCOMPARE_WEIGHT = 30;
-	private static final double SUBSTR_INTIIALS_WEIGHT = 4;
-	private static final double COMMON_INTIIALS_WEIGHT = 18;
+	private static final double INITIALS_LEV_WEIGHT = 0;
+	private static final double AVE_LEV_WEIGHT = 0;
+	private static final double ORDERED_LEV_WEIGHT = 1;
+	private static final double BBBCOMPARE_WEIGHT = 13;
+	private static final double SUBSTR_INTIIALS_WEIGHT = 1;
+	private static final double COMMON_INTIIALS_WEIGHT = 9;
 
 	// ASSUMES THAT NAMEDATA.JAVA HAS ALREADY BEEN INSTANTIATED 
 	public Name(String s) {
@@ -63,11 +65,23 @@ public class Name {
 		Arrays.sort(orderedBlocks);
 		
 		// Creates Initials
+		int initialBlocks = 0;
 		StringBuilder initialsBuilder = new StringBuilder();
 		for (String i : blocks) {
 			if (i.length() > 0) initialsBuilder.append(i.charAt(0));
+			if (i.length() == 1) ++initialBlocks;
 		}
 		initials = initialsBuilder.toString();
+		
+		// Creates non initial blocks
+		orderedNameBlocks = new String[blocks.length - initialBlocks];
+		int k = 0;
+		for (String i : orderedBlocks) {
+			if (i.length() > 1) {
+				orderedNameBlocks[k] = i;
+				++k;
+			}
+		}
 		
 		// Creates ordered initials
 		StringBuilder oinitialsBuilder = new StringBuilder();
@@ -95,6 +109,7 @@ public class Name {
 				nicNames.add(NameData.getNames(orderedBlocks[i]));
 			}
 		}
+		
 	}
 	
 	// Getters
@@ -185,7 +200,7 @@ public class Name {
 			}
 		}
 		
-		return  ( (double) commonInitials)/(Math.max(orderedInitials.length(), rhs.orderedInitials.length()));
+		return  ( (double) commonInitials)/(Math.min(orderedInitials.length(), rhs.orderedInitials.length()));
 	}
 	
 	// returns 1 if the one of the initials is a substring of the other
@@ -223,22 +238,23 @@ public class Name {
 	}
 	
 	// Block by block comparison 
-	private double BBBCompare(Name rhs) {
+	private double BBBSimilarityCompareison(Name rhs) {
 		int similarNames = 0;
 		int similarNameSum = 0;
-		int score = 0;
+		double score = 0;
 		
-		int totalNamesLhs = orderedBlocks.length;
-		int totalNamesRhs = rhs.orderedBlocks.length;
-		
-		for (String name : orderedBlocks) {
+		int totalNamesLhs = orderedNameBlocks.length;
+		int totalNamesRhs = rhs.orderedNameBlocks.length;
+
+		for (String name : orderedNameBlocks) {
 			// Case of empty rhs name
 			if (totalNamesRhs == 0) break;
 			
 			// gets an array of the score between the curr lhs block and all rhs blocks
 			double[] blockScores = new double[totalNamesRhs];
-			for (int i = 0; i < totalNamesRhs; ++i) {
-				blockScores[i] = compareBlock(name, rhs.orderedBlocks[i]);
+			for (int i = 0; i < rhs.orderedNameBlocks.length; ++i) {
+				//System.out.println("Compairing blocks: " + name + ", " + rhs.orderedNameBlocks[i]);
+				blockScores[i] = compareBlock(name, rhs.orderedNameBlocks[i]);
 			}
 			
 			// Finds maximum value & positon of max value
@@ -259,15 +275,27 @@ public class Name {
 		
 		if (similarNames == 0) score = 0;
 		else {
-			score = similarNameSum/similarNames;
+			score = similarNameSum/((double) similarNames);
 			
-			// TODO: consider the case where there there are more lhs or rhs names
-			if ((similarNames == totalNamesRhs) && (similarNames == totalNamesLhs)) {
-				// this function halves the distance between the score and one
-				score =  1 - ((1 - score) / 2);
-			}
+//			if ((similarNames == totalNamesRhs) && (similarNames == totalNamesLhs)) {
+//				// this function halves the distance between the score and one
+//				score =  1 - ((1 - score) / 2);
+//			}
 		}
 		return score;
+	}
+	
+	// Co-author comparison
+	public double coAuthorCompare(Name rhs) {
+		int numInCommon = 0;
+		for (Name i : coauthors) {
+			for (Name j : rhs.coauthors) {
+				if (i.compare(j) > Name.SIMILARITY_MINIMUM) {
+					++numInCommon;
+				}
+			}
+		}
+		return ((double) numInCommon / coauthors.size());
 	}
 	
 	// Prints all local variables
@@ -285,18 +313,18 @@ public class Name {
 	// Prints all comparison details 
 	public void printCompareStats(Name rhs) {
 		System.out.println(this.mainInstance + " : " + rhs.mainInstance);
-		System.out.println("compare: " + compareClassic(rhs));
-		System.out.println("compareTitles: " + compareTitles(rhs));
-		System.out.println("compareCombination: " + compareCombination(rhs));
-		System.out.println("compareInitialsPermutaution: " + compareInitialsPermutation(rhs));
-		System.out.println("compareInitialsCombination: " + compareInitialsCombination(rhs));
-		System.out.println("Levenshtine distance classic: " + (1 / (classicLev(rhs) + 1)));
-		System.out.println("Levenshtine distance of initials: " + (1 / (initialLev(rhs) + 1)));
-		System.out.println("Levenshtine average distance: " + (1 / (initialLev(rhs) + 1)));
-		System.out.println("Levenshtine ordered distance: " + (1 / (orderedLev(rhs) + 1)));
-		System.out.println("BBBCompare: " + BBBCompare(rhs));
-		System.out.println("substrInitials: " + substrInitials(rhs));
-		System.out.println("Common initials: " + commonInitials(rhs));
+		System.out.println("compare: " + compareClassic(rhs) * COMPARE_CLASSIC_WEIGHT + "/" + COMPARE_CLASSIC_WEIGHT);
+		System.out.println("compareTitles: " + compareTitles(rhs) * COMPARE_TITLES_WEIGHT + "/" + COMPARE_TITLES_WEIGHT);
+		System.out.println("compareCombination: " + compareCombination(rhs) * COMPARE_COMBINATION_WEIGHT + "/" + COMPARE_COMBINATION_WEIGHT);
+		System.out.println("compareInitialsPermutaution: " + compareInitialsPermutation(rhs) * COMPARE_INITIALS_PERM_WEIGHT + "/" + COMPARE_INITIALS_PERM_WEIGHT);
+		System.out.println("compareInitialsCombination: " + compareInitialsCombination(rhs) * COMPARE_INITIALS_COMBO_WEIGHT + "/" + COMPARE_INITIALS_COMBO_WEIGHT);
+		System.out.println("Levenshtine distance classic: " + (1 / (classicLev(rhs) + 1)) * CLASSIC_LEV_WEIGHT + "/" + CLASSIC_LEV_WEIGHT);
+		System.out.println("Levenshtine distance of initials: " + (1 / (initialLev(rhs) + 1)) * INITIALS_LEV_WEIGHT + "/" + INITIALS_LEV_WEIGHT);
+		System.out.println("Levenshtine average distance: " + (1 / (initialLev(rhs) + 1)) * AVE_LEV_WEIGHT + "/" + AVE_LEV_WEIGHT);
+		System.out.println("Levenshtine ordered distance: " + (1 / (orderedLev(rhs) + 1)) * ORDERED_LEV_WEIGHT + "/" + ORDERED_LEV_WEIGHT);
+		System.out.println("BBBCompare: " + BBBSimilarityCompareison(rhs) * BBBCOMPARE_WEIGHT + "/" + BBBCOMPARE_WEIGHT);
+		System.out.println("substrInitials: " + substrInitials(rhs) * SUBSTR_INTIIALS_WEIGHT + "/" + SUBSTR_INTIIALS_WEIGHT);
+		System.out.println("Common initials: " + commonInitials(rhs) * COMMON_INTIIALS_WEIGHT + "/" + COMMON_INTIIALS_WEIGHT);
 		System.out.println("Full comparison: " + compare(rhs));
 	}
 	
@@ -333,13 +361,20 @@ public class Name {
 		compVals[6] = 1 / (initialLev(rhs) + 1) * weights[6];
 		compVals[7] = 1 / (aveLev(rhs) + 1) * weights[7];
 		compVals[8] = 1 / (orderedLev(rhs) + 1) * weights[8];
-		compVals[9] = BBBCompare(rhs) * weights[9];
+		compVals[9] = BBBSimilarityCompareison(rhs) * weights[9];
 		compVals[10] = substrInitials(rhs) * weights[10];
 		compVals[11] = commonInitials(rhs) * weights[11];
 		
 		for (double d : compVals) {
 			totalScore += d;
 		}
+		
+		// Special conditions:
+		// If initials match perfectly add 1/3 the dist between score and 1
+		if (orderedInitials == rhs.orderedInitials) {
+			totalScore += ((1 - totalScore) / 3);
+		}
+		
 		return totalScore/weightSum;
 	}
 }
