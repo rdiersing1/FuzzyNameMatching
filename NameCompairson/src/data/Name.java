@@ -24,6 +24,7 @@ public class Name {
 	
 	// Constants
 	private static final double SIMILARITY_MINIMUM = 0.4;
+	public static final double FULL_SIMILARITY_MINIMUM = 0.88;
 	// Weights
 	private static final double COMPARE_CLASSIC_WEIGHT = 1;
 	private static final double COMPARE_TITLES_WEIGHT = 2;
@@ -34,15 +35,18 @@ public class Name {
 	private static final double INITIALS_LEV_WEIGHT = 0;
 	private static final double AVE_LEV_WEIGHT = 0;
 	private static final double ORDERED_LEV_WEIGHT = 1;
-	private static final double BBBCOMPARE_WEIGHT = 13;
+	private static final double BBBCOMPARE_WEIGHT = 15;
 	private static final double SUBSTR_INTIIALS_WEIGHT = 1;
 	private static final double COMMON_INTIIALS_WEIGHT = 9;
+	private static final double BBBSTRICT_COMPARE_WEIGHT = 2;
+	private static final double BBBHARD_COMPARE_WEIGHT = 7;
 
 	// ASSUMES THAT NAMEDATA.JAVA HAS ALREADY BEEN INSTANTIATED 
 	public Name(String s) {
 		// converts to lowercase and removes caps
 		mainInstance = s.toLowerCase();
 		mainInstance = mainInstance.replace(".", "");
+		mainInstance = mainInstance.replace(",", "");
 		
 		// Converts to name blocks
 		String[] tempBlocks;
@@ -100,15 +104,15 @@ public class Name {
 		orderedBlocksStr = oBlockBuilder.toString();
 		
 		// Sets up nicname vector of possible name sets
-		nicNames = new Vector< Set<NamePopularityPair> >();
-		for (int i = 0; i < orderedBlocks.length; ++i) {
-			if (NameData.getNames(orderedBlocks[i]) == null) {
-				nicNames.add(new HashSet<NamePopularityPair>());
-			}
-			else {
-				nicNames.add(NameData.getNames(orderedBlocks[i]));
-			}
-		}
+//		nicNames = new Vector< Set<NamePopularityPair> >();
+//		for (int i = 0; i < orderedBlocks.length; ++i) {
+//			if (NameData.getNames(orderedBlocks[i]) == null) {
+//				nicNames.add(new HashSet<NamePopularityPair>());
+//			}
+//			else {
+//				nicNames.add(NameData.getNames(orderedBlocks[i]));
+//			}
+//		}
 		
 	}
 	
@@ -243,7 +247,6 @@ public class Name {
 		int similarNameSum = 0;
 		double score = 0;
 		
-		int totalNamesLhs = orderedNameBlocks.length;
 		int totalNamesRhs = rhs.orderedNameBlocks.length;
 
 		for (String name : orderedNameBlocks) {
@@ -266,7 +269,6 @@ public class Name {
 			}
 			
 			// increments Score
-			// TODO: account for similar names that have already been used
 			if (max >= SIMILARITY_MINIMUM) {
 				++similarNames; 
 				similarNameSum += max;
@@ -285,6 +287,47 @@ public class Name {
 		return score;
 	}
 	
+	// Does the exact same thing as BBBSimilarityCompareison except with a strict 
+	// comparison instead of a Levenshtein distance 
+	private double BBBStrictCompare(Name rhs) {
+		int sameNames = 0;
+		
+		int totalNamesLhs = orderedNameBlocks.length;
+		int totalNamesRhs = rhs.orderedNameBlocks.length;
+		
+		if (totalNamesRhs == 0 || totalNamesLhs == 0) return 0;
+		
+		for (String name : orderedNameBlocks) {
+			for (String rhsName : rhs.orderedNameBlocks) {
+				if (name.equals(rhsName)) {
+					++sameNames;
+					break;
+				}
+			}
+		}
+		
+		return sameNames/((double) Math.min(totalNamesRhs, totalNamesLhs));
+	}
+	
+	// Will count name blocks that contain other name blocks
+	private double BBBHardCompare(Name rhs) {
+		int sameNames = 0;
+		
+		int totalNamesLhs = orderedBlocks.length;
+		int totalNamesRhs = rhs.orderedBlocks.length;
+		
+		for (String name : orderedBlocks) {
+			for (String rhsName : rhs.orderedBlocks) {
+				if (name.contains(rhsName) || rhsName.contains(name)) {
+					++sameNames;
+					break;
+				}
+			}
+		}
+		
+		return sameNames/((double) Math.min(totalNamesRhs, totalNamesLhs));
+	}
+	
 	// Co-author comparison
 	public double coAuthorCompare(Name rhs) {
 		int numInCommon = 0;
@@ -296,18 +339,6 @@ public class Name {
 			}
 		}
 		return ((double) numInCommon / coauthors.size());
-	}
-	
-	// Prints all local variables
-	public void print() {
-		System.out.println("mainInstance: " + mainInstance);
-		System.out.println("intials: " + initials);
-		System.out.println("ordered initials: " + orderedInitials);
-		System.out.println("ordered blocks: " + orderedBlocksStr);
-		System.out.println("title: " + title);
-		
-		System.out.println("block_array: " + String.join("_", blocks));
-		System.out.println("ordered block array: " + String.join("_", orderedBlocks));
 	}
 	
 	// Prints all comparison details 
@@ -325,13 +356,15 @@ public class Name {
 		System.out.println("BBBCompare: " + BBBSimilarityCompareison(rhs) * BBBCOMPARE_WEIGHT + "/" + BBBCOMPARE_WEIGHT);
 		System.out.println("substrInitials: " + substrInitials(rhs) * SUBSTR_INTIIALS_WEIGHT + "/" + SUBSTR_INTIIALS_WEIGHT);
 		System.out.println("Common initials: " + commonInitials(rhs) * COMMON_INTIIALS_WEIGHT + "/" + COMMON_INTIIALS_WEIGHT);
+		System.out.println("BBBStrict compare: " + BBBStrictCompare(rhs) * BBBSTRICT_COMPARE_WEIGHT + "/" + BBBSTRICT_COMPARE_WEIGHT);
+		System.out.println("BBBHard compare: " + BBBHardCompare(rhs) * BBBHARD_COMPARE_WEIGHT + "/" + BBBHARD_COMPARE_WEIGHT);
 		System.out.println("Full comparison: " + compare(rhs));
 	}
 	
 	// Linear combination of all other comparisons
 	public double compare(Name rhs) {
-		double[] compVals = new double[12];
-		double[] weights = new double[12];
+		double[] compVals = new double[14];
+		double[] weights = new double[14];
 		double totalScore = 0;
 		double weightSum = 0;
 		
@@ -347,23 +380,27 @@ public class Name {
 		weights[9] = BBBCOMPARE_WEIGHT;
 		weights[10] = SUBSTR_INTIIALS_WEIGHT;
 		weights[11] = COMMON_INTIIALS_WEIGHT;
-		
-		for (double d : weights) {
-			weightSum += d;
-		}
+		weights[12] = BBBSTRICT_COMPARE_WEIGHT;
+		weights[13] = BBBHARD_COMPARE_WEIGHT;
 		
 		compVals[0] = compareClassic(rhs) * weights[0];
 		compVals[1] = compareTitles(rhs) * weights[1];
-		compVals[2] = compareCombination(rhs) * weights[2];
-		compVals[3] = compareInitialsPermutation(rhs) * weights[3];
+		compVals[2] = 0; //compareCombination(rhs) * weights[2];
+		compVals[3] = 0; //compareInitialsPermutation(rhs) * weights[3];
 		compVals[4] = compareInitialsCombination(rhs) * weights[4];
-		compVals[5] = 1 / (classicLev(rhs) + 1) * weights[5];
-		compVals[6] = 1 / (initialLev(rhs) + 1) * weights[6];
-		compVals[7] = 1 / (aveLev(rhs) + 1) * weights[7];
+		compVals[5] = 0; //1 / (classicLev(rhs) + 1) * weights[5];
+		compVals[6] = 0; //1 / (initialLev(rhs) + 1) * weights[6];
+		compVals[7] = 0; //1 / (aveLev(rhs) + 1) * weights[7];
 		compVals[8] = 1 / (orderedLev(rhs) + 1) * weights[8];
 		compVals[9] = BBBSimilarityCompareison(rhs) * weights[9];
 		compVals[10] = substrInitials(rhs) * weights[10];
 		compVals[11] = commonInitials(rhs) * weights[11];
+		compVals[12] = BBBStrictCompare(rhs) * weights[12];
+		compVals[13] = BBBHardCompare(rhs) * weights[13];
+		
+		for (double d : weights) {
+			weightSum += d;
+		}
 		
 		for (double d : compVals) {
 			totalScore += d;
