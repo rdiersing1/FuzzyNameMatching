@@ -11,9 +11,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeMap;
 
 import data.Name;
 import data.NameData;
@@ -166,23 +164,24 @@ public class Main {
 		Arrays.sort(names, new nameProbabilityComparator());
 		
 		// Prints results with line dividing probable names from improbable names
-		double oldVal = 1;
-		for (nameProbability n : names) {
-			double newVal = n.getProbability();
-			try {
-				if ((oldVal > Name.FULL_SIMILARITY_MINIMUM) && newVal < Name.FULL_SIMILARITY_MINIMUM) {
-					
-						out.write("--------------------------------------------------------------\n");
-				}
-				out.write(n.getName() + " " + newVal + "\n");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			oldVal = newVal;
-		}
-		
+		// For searching not clustering
+//		double oldVal = 1;
+//		for (nameProbability n : names) {
+//			double newVal = n.getProbability();
+//			try {
+//				if ((oldVal > Name.FULL_SIMILARITY_MINIMUM) && newVal < Name.FULL_SIMILARITY_MINIMUM) {
+//					
+//						out.write("--------------------------------------------------------------\n");
+//				}
+//				out.write(n.getName() + " " + newVal + "\n");
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			oldVal = newVal;
+//		}
+//		
 		try {
-			out.write("Done\n\n");
+			// out.write("Done\n\n");
 			out.write("Matching Names\n\n");
 		} catch (IOException e) {
 			e.printStackTrace();
