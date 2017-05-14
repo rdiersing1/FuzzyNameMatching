@@ -1,0 +1,11 @@
+// Name Block Comparison Tests
+
+System.out.println("");
+System.out.println("");
+System.out.println("Joe -> Joey: " + robert.compareBlock("Joe", "Joey"));
+System.out.println("Joe -> John: " + robert.compareBlock("Joe", "John"));
+System.out.println("Joe -> Bob: " + robert.compareBlock("Joe", "Bob"));
+System.out.println("Joe -> Billy: " + robert.compareBlock("Joe", "Billy"));
+System.out.println("Joe -> Joesiph: " + robert.compareBlock("Joe", "Joesiph"));
+System.out.println("Joe -> Robert: " + robert.compareBlock("Joe", "Robert"));
+System.out.println("Joe -> J: " + robert.compareBlock("Joe", "J"));

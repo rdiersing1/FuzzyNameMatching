@@ -11,7 +11,13 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import data.Name;
 import data.NameData;
@@ -59,11 +65,14 @@ public class Main {
 		FileWriter fw = null;
 		BufferedWriter out = null;
 		
-		Name nameToSearch = new Name("");
 		Set<Name> setOfNames = new HashSet<>();
 		Map<Name, Integer> namesToClusters = new HashMap<>();
 		Map<Set<Name>, Double> nameCompairsons = new HashMap<>();
 		ArrayList<Set> nameClusters = new ArrayList<>();
+		
+		Map<Set<Character>, Set<Name>> namePreparedSets= new HashMap<>(); 
+		Map<Name, Set<Set<Name>>> overlappingNamesToSets = new HashMap<>();
+		Set<Name> overlappingNames = new HashSet<>();
 		
 		try {
 			// Reads titles set and nicnames set
@@ -72,25 +81,6 @@ public class Main {
 			BufferedReader titlesBR = new BufferedReader(titlesFR);
 			BufferedReader nicnamesBR = new BufferedReader(nicnamesFR);
 			new NameData(titlesBR, nicnamesBR);
-			
-			// Reads test set
-			FileReader testSetFR = new FileReader(args[0]);
-			BufferedReader testSetBR = new BufferedReader(testSetFR);
-			
-			String currLine = testSetBR.readLine();
-			while (currLine != null) {
-				String[] currLineArr = currLine.split(" ");
-				if (currLineArr.length > 0) {
-					if (currLineArr[0].equalsIgnoreCase("SEARCH_FOR:") && currLineArr.length > 1) {
-						currLineArr = Arrays.copyOfRange(currLineArr, 1, currLineArr.length);
-						nameToSearch = new Name(String.join(" ", currLineArr));
-					}
-					else {
-						setOfNames.add(new Name(currLine));
-					}
-				}
-				currLine = testSetBR.readLine();
-			}
 			
 			// Writing output to file 
 			fw = new FileWriter(args[1]);
@@ -102,99 +92,224 @@ public class Main {
 			System.out.println("ERROR: Not enough command line arguments");
 		}
 		
-		try {
-			out.write("Name to search: " + nameToSearch.getMainInstance() + "\n");
-			out.write("Database size: " + setOfNames.size() + "\n");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		// Grabs names from wiki
+		String urlStr = args[0];
+		Document doc;
+		System.out.println("Grabbing elements");
+		do {
+			try {
+				doc = Jsoup.connect(urlStr).get();
+				Element nameAnchorDiv = doc.getElementById("mw-pages");
+				Elements nameAnchors = nameAnchorDiv.getElementsByTag("a");
+				
+				urlStr = null;
+				for (Element name : nameAnchors) {
+					if (name.text().equals("next page")) {
+						urlStr = "http://wiki.linked.earth" + name.attr("href");
+					} else if (!name.text().equals("previous page")) {
+						setOfNames.add(new Name(name.text(), "http://wiki.linked.earth" + name.attr("href")));
+					}
+				}
+				
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		} while (urlStr != null);
 		
-		nameProbability[] names = new nameProbability[setOfNames.size()];
+		System.out.println("Preprocessing");
 		
-		// Search for name
-		int i = 0;
+		// Start Timer
+		long startTimePreprocess = System.nanoTime();
+		
+		// Preprocessing
+		// Clusters names so that no two names with no common initials are compared
 		for (Name n : setOfNames) {
-			names[i] = new nameProbability(n.getMainInstance(), n.compare(nameToSearch));
-			++i;
+			String initials = n.getInitials();
+			
+			Set<Character> iSet = new HashSet<>();
+			for (int i = 0; i < initials.length(); ++i) {
+				iSet.add(initials.charAt(i));
+			}
+			
+			// iterate over the map to see if we can put the name in a prepared set
+			boolean needsNewSet = true;
+			for (Map.Entry<Set<Character>, Set<Name>> entry : namePreparedSets.entrySet()) {
+				if (entry.getKey().containsAll(iSet)) {			// if we can, do it
+					entry.getValue().add(n);
+					needsNewSet = false;
+					break;
+				} 
+				
+				boolean overlap = false;
+				for (int i = 0; i < initials.length(); ++i) {	// if not find overlap
+					if (entry.getKey().contains(initials.charAt(i))) {
+						overlap = true;
+						break;
+					}
+				}
+				if (overlap) {
+					overlappingNames.add(n);
+					needsNewSet = false;
+					break;
+				}
+			}
+			
+			if (needsNewSet) {		// make new set if necessary
+				Set<Name> newNameSet = new HashSet<>();
+				newNameSet.add(n);
+				namePreparedSets.put(iSet, newNameSet);
+			}
 		}
+		
+		// map the overlapping names to their respective sets
+		for (Name n : overlappingNames) {
+			
+			String initials = n.getInitials();
+			boolean valid = false;
+			for (Map.Entry<Set<Character>, Set<Name>> entry : namePreparedSets.entrySet()) {
+				for (int i = 0; i < initials.length(); ++i) {
+					if (entry.getKey().contains(initials.charAt(i))) {
+						valid = true;
+						if (overlappingNamesToSets.containsKey(n)) {
+							overlappingNamesToSets.get(n).add(entry.getValue());
+						} else {
+							Set<Set<Name>> s = new HashSet<>();
+							s.add(entry.getValue());
+							overlappingNamesToSets.put(n, s);
+						}
+						break;
+					}
+				}
+			}
+			
+			if (!valid) {
+				System.out.println("WARNING VALID IS FALSE FOR NAME " + n.getMainInstance());
+			}
+		}
+		
+		// End timer
+		long endTimePreprocess = System.nanoTime();
+		
+		System.out.println("Num preprocessed sets: " + namePreparedSets.size());
+		System.out.println("Num overlaping elements: " + overlappingNames.size());
+		
+		System.out.println("Preprocessed sets");
+		for (Set<Character> cSet : namePreparedSets.keySet()) {
+			System.out.println(cSet.toString());
+		}
+		
+		System.out.println("Making name compairsons");
 		
 		// Start timer
-		long startTime = System.nanoTime();
+		long startTimeCompare = System.nanoTime();
 		
 		int numCompairsons = 0;
-		// Compare all names
-		for (Name n1: setOfNames) {
-			for (Name n2 : setOfNames) {
-				Set<Name> namesToCompare = new HashSet<>();
-				namesToCompare.add(n1);
-				namesToCompare.add(n2);
-				if (!nameCompairsons.containsKey(namesToCompare)) {
-					++numCompairsons;
-					nameCompairsons.put(namesToCompare, n1.compare(n2));
+		// Compare Names
+		for (Name n1 : overlappingNames) {
+			for (Set<Name> nSet : overlappingNamesToSets.get(n1)) {
+				for (Name n2 : nSet) {
+					Set<Name> namesToCompare = new HashSet<>();
+					namesToCompare.add(n1);
+					namesToCompare.add(n2);
+					if (!nameCompairsons.containsKey(namesToCompare)) {
+						++numCompairsons;
+						nameCompairsons.put(namesToCompare, n1.compare(n2));
+					}
 				}
 			}
 		}
 		
-		// Cluster
-		for (Name n1 : setOfNames) {
-			if (!namesToClusters.containsKey(n1)) {
-				Set<Name> matchingNames = new HashSet<>();
-				matchingNames.add(n1);
-				for (Name n2 : setOfNames) {
-					if (!namesToClusters.containsKey(n2)) {
-						Set<Name> namesToCompare = new HashSet<>();
-						namesToCompare.add(n1);
-						namesToCompare.add(n2);
-						if (nameCompairsons.get(namesToCompare) > Name.FULL_SIMILARITY_MINIMUM) {
-							matchingNames.add(n2);
-						}
+		for (Set<Name> nSet : namePreparedSets.values()) {
+			for (Name n1 : nSet) {
+				for (Name n2 : nSet) {
+					Set<Name> namesToCompare = new HashSet<>();
+					namesToCompare.add(n1);
+					namesToCompare.add(n2);
+					if (!nameCompairsons.containsKey(namesToCompare)) {
+						++numCompairsons;
+						nameCompairsons.put(namesToCompare, n1.compare(n2));
 					}
-				}
-				nameClusters.add(matchingNames);
-				namesToClusters.put(n1, nameClusters.size() - 1);
-				for (Name n2 : matchingNames) {
-					namesToClusters.put(n2, nameClusters.size() - 1);
 				}
 			}
 		}
 		
 		// End timer
-		long endTime = System.nanoTime();
+		long endTimeCompare = System.nanoTime();
 		
-		Arrays.sort(names, new nameProbabilityComparator());
+		System.out.println("Clustering");
 		
-		// Prints results with line dividing probable names from improbable names
-		// For searching not clustering
-//		double oldVal = 1;
-//		for (nameProbability n : names) {
-//			double newVal = n.getProbability();
-//			try {
-//				if ((oldVal > Name.FULL_SIMILARITY_MINIMUM) && newVal < Name.FULL_SIMILARITY_MINIMUM) {
-//					
-//						out.write("--------------------------------------------------------------\n");
-//				}
-//				out.write(n.getName() + " " + newVal + "\n");
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//			oldVal = newVal;
-//		}
-//		
+		// Start timer
+		long startTimeCluster = System.nanoTime();
+		
+		// Cluster
+		for (Name n1 : overlappingNames) {
+			if (!namesToClusters.containsKey(n1)) {
+				Set<Name> cluster = new HashSet<>();
+				cluster.add(n1);
+				for (Set<Name> nSet : overlappingNamesToSets.get(n1)) {
+					for (Name n2 : nSet) {
+						Set<Name> namesToCompare = new HashSet<>();
+						namesToCompare.add(n1);
+						namesToCompare.add(n2);
+						if (nameCompairsons.get(namesToCompare) > Name.FULL_SIMILARITY_MINIMUM) {
+							if (!namesToClusters.containsKey(n2)) {
+								cluster.add(n2);
+							} else {
+								int i = namesToClusters.get(n2);
+								nameClusters.get(i).add(n1);
+							}
+						}
+					}
+				}
+				nameClusters.add(cluster);
+				namesToClusters.put(n1, nameClusters.size() - 1);
+				for (Name n2 : cluster) {
+					namesToClusters.put(n2, nameClusters.size() - 1);
+				}
+			}
+		}
+		
+		for(Set<Name> nSet : namePreparedSets.values()) {
+			for (Name n1 : nSet) {
+				if (!nameClusters.contains(n1)) {
+					Set<Name> cluster = new HashSet<>();
+					cluster.add(n1);
+					for (Name n2 : nSet) {
+						Set<Name> namesToCompare = new HashSet<>();
+						namesToCompare.add(n1);
+						namesToCompare.add(n2);
+						if (nameCompairsons.get(namesToCompare) > Name.FULL_SIMILARITY_MINIMUM) {
+							if (!namesToClusters.containsKey(n2)) {
+								cluster.add(n2);
+							} else {
+								int i = namesToClusters.get(n2);
+								nameClusters.get(i).add(n1);
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		// End time
+		long endTimeCluster = System.nanoTime();
+		
 		try {
-			// out.write("Done\n\n");
 			out.write("Matching Names\n\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 		try {
-			int j = 0;
+			int j = 1;
 			for (Set<Name> nSet : nameClusters) {
-				out.write(j + ". \n"); ++j;
-				for (Name n : nSet) {
-					out.write(n.getMainInstance() + "\n");
+				if (nSet.size() > 1) {
+					out.write(j + ". \n"); ++j;
+					for (Name n : nSet) {
+						out.write(n.getMainInstance() + " : " + n.getLink() + "\n");
+					}
+					out.write("\n");
 				}
-				out.write("\n");
 			}
 			out.write("\n");	
 			out.flush();
@@ -202,21 +317,18 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		long runTime = endTime - startTime;
-		long runTimePerComp = runTime / numCompairsons;
+		long runTimePreprocessMS = (endTimePreprocess - startTimePreprocess) / 1_000_000;
+		long runTimeCompare = endTimeCompare - startTimeCompare;
+		long runTimeClusterMS = (endTimeCluster - startTimeCluster) / 1_000_000;
+		long runTimePerCompUS = (runTimeCompare / numCompairsons) / 1_000;
+		long runTimeCompareMS = runTimeCompare / 1_000_000;
 		
 		System.out.println("Runtime stats:");
+		System.out.println("Dataset Size: " + setOfNames.size());
 		System.out.println("Num compairsons: " + numCompairsons);
-		System.out.println("Total clustering runtime: " + (runTime/1_000_000) + "ms");
-		System.out.println("Runtime per compairson: " + (runTimePerComp/1000) + "us");
-		System.out.println("Estimated runtime for size 1,000: " + (1E6 * runTimePerComp / 1_000_000_000) + "s");
-		System.out.println("Estimated runtime for adding to size 1,000: " + (1000 * runTimePerComp / 1_000_000) + "ms");
-		System.out.println("Estimated runtime for size: 30,000: " + (9E8 * runTimePerComp / 1_000_000_000) + "s");
-		System.out.println("Estimated runtime for adding to size 30,000: " + (30_000 * runTimePerComp / 1_000_000) + "ms");
-		
-//		Name name1 = new Name("Terri Diersing");
-//		Name name2 = new Name("Tim Diersing");
-//		System.out.println("COMPAIRSON: ");
-//		name1.printCompareStats(name2);
+		System.out.println("Preprocessing runtime: " + runTimePreprocessMS + "ms");
+		System.out.println("Comparison runtime: " + runTimeCompareMS + "ms");
+		System.out.println("Runtime per compairson: " + runTimePerCompUS + "us");
+		System.out.println("Clustering runtime: " + runTimeClusterMS + "ms");
 	}
 }

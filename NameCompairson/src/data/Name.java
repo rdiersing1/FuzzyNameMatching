@@ -22,6 +22,8 @@ public class Name {
 	private Vector< Set<NamePopularityPair> > nicNames;
 	private Set<Name> coauthors;
 	
+	private String link;
+	
 	// Constants
 	private static final double SIMILARITY_MINIMUM = 0.4;
 	public static final double FULL_SIMILARITY_MINIMUM = 0.88;
@@ -34,7 +36,7 @@ public class Name {
 	private static final double CLASSIC_LEV_WEIGHT = 0;
 	private static final double INITIALS_LEV_WEIGHT = 0;
 	private static final double AVE_LEV_WEIGHT = 0;
-	private static final double ORDERED_LEV_WEIGHT = 1;
+	private static final double ORDERED_LEV_WEIGHT = 0;
 	private static final double BBBCOMPARE_WEIGHT = 15;
 	private static final double SUBSTR_INTIIALS_WEIGHT = 1;
 	private static final double COMMON_INTIIALS_WEIGHT = 9;
@@ -42,7 +44,9 @@ public class Name {
 	private static final double BBBHARD_COMPARE_WEIGHT = 7;
 
 	// ASSUMES THAT NAMEDATA.JAVA HAS ALREADY BEEN INSTANTIATED 
-	public Name(String s) {
+	public Name(String s, String link) {
+		this.link = link;
+		
 		// converts to lowercase and removes caps
 		mainInstance = s.toLowerCase();
 		mainInstance = mainInstance.replace(".", "");
@@ -103,22 +107,19 @@ public class Name {
 		if (oBlockBuilder.length() > 0) oBlockBuilder.deleteCharAt(oBlockBuilder.length() - 1);
 		orderedBlocksStr = oBlockBuilder.toString();
 		
-		// Sets up nicname vector of possible name sets
-//		nicNames = new Vector< Set<NamePopularityPair> >();
-//		for (int i = 0; i < orderedBlocks.length; ++i) {
-//			if (NameData.getNames(orderedBlocks[i]) == null) {
-//				nicNames.add(new HashSet<NamePopularityPair>());
-//			}
-//			else {
-//				nicNames.add(NameData.getNames(orderedBlocks[i]));
-//			}
-//		}
-		
 	}
 	
 	// Getters
 	public String getMainInstance() {
 		return mainInstance;
+	}
+	
+	public String getLink() {
+		return link;
+	}
+	
+	public String getInitials() {
+		return initials;
 	}
 	
 	// Comparison algorithms 
@@ -138,55 +139,10 @@ public class Name {
 		return 0.0;
 	}
 	
-	// Will return 1.0 if the name blocks match even if in wrong order
-	private double compareCombination(Name rhs) {
-		if (this.orderedBlocksStr.equalsIgnoreCase(rhs.orderedBlocksStr)) return 1.0;
-		return 0.0;
-	}
-	
-	// Will return 1.0 if the initials are the same & in the same order
-	private double compareInitialsPermutation(Name rhs) {
-		if (this.initials.equalsIgnoreCase(rhs.initials)) return 1.0;
-		return 0.0;
-	}
-	
 	// Will return 1.0 if the initals are the same even if out of order
 	private double compareInitialsCombination(Name rhs) {
 		if (this.orderedInitials.equalsIgnoreCase(rhs.orderedInitials)) return 1.0;
 		return 0.0;
-	}
-	
-	// Will return Levenshtein distance of the main instance
-	private double classicLev(Name rhs) {
-		EditDistance ed = new EditDistance();
-		return ed.score(this.mainInstance, rhs.mainInstance);
-	}
-	
-	// Will return Levenshtein distance of the initials
-	private double initialLev(Name rhs) {
-		EditDistance ed = new EditDistance();
-		return ed.score(this.initials, rhs.initials);
-	}
-	
-	// Will return the average Levenshtein distance of the ordered name
-	// blocks, if one has more name blocks than the other it will not 
-	// contribute to the average
-	private double aveLev(Name rhs) {
-		EditDistance ed = new EditDistance();
-		double scoreSum = 0.0;
-		int numBlocks = Math.min(rhs.blocks.length, this.blocks.length);
-		
-		for (int i = 0; i < numBlocks; ++i) {
-			scoreSum += ed.score(this.blocks[i], rhs.blocks[i]);
-		}
-		return scoreSum / numBlocks;
-	}
-	
-	// Will return the Levenshtein distance of the ordered name blocks
-	// if one name has more blocks it WILL contribute to the edit distance
-	private double orderedLev(Name rhs) {
-		EditDistance ed = new EditDistance();
-		return ed.score(this.orderedBlocks, rhs.orderedBlocks);
 	}
 	
 	// Will return the number of initials in common over the max number of initials
@@ -228,7 +184,7 @@ public class Name {
 		// handles the case of an empty name block
 		if (lhs.isEmpty() || rhs.isEmpty()) return 0;
 		
-		// If the initials are the same the score is increased
+		// If the initials are not the same the currscore is increased
 		if (lhs.charAt(0) != rhs.charAt(0)) currScore += 3;
 		currScore = 1 / (1 + currScore);
 		
@@ -278,11 +234,6 @@ public class Name {
 		if (similarNames == 0) score = 0;
 		else {
 			score = similarNameSum/((double) similarNames);
-			
-//			if ((similarNames == totalNamesRhs) && (similarNames == totalNamesLhs)) {
-//				// this function halves the distance between the score and one
-//				score =  1 - ((1 - score) / 2);
-//			}
 		}
 		return score;
 	}
@@ -341,6 +292,57 @@ public class Name {
 		return ((double) numInCommon / coauthors.size());
 	}
 	
+	//----------------------------------------
+	// Currently Unused
+	//----------------------------------------
+	
+	// Will return 1.0 if the name blocks match even if in wrong order
+	private double compareCombination(Name rhs) {
+		if (this.orderedBlocksStr.equalsIgnoreCase(rhs.orderedBlocksStr)) return 1.0;
+		return 0.0;
+	}
+	
+	// Will return 1.0 if the initials are the same & in the same order
+	private double compareInitialsPermutation(Name rhs) {
+		if (this.initials.equalsIgnoreCase(rhs.initials)) return 1.0;
+		return 0.0;
+	}
+	
+	// Will return Levenshtein distance of the main instance
+	private double classicLev(Name rhs) {
+		EditDistance ed = new EditDistance();
+		return ed.score(this.mainInstance, rhs.mainInstance);
+	}
+	
+	// Will return Levenshtein distance of the initials
+	private double initialLev(Name rhs) {
+		EditDistance ed = new EditDistance();
+		return ed.score(this.initials, rhs.initials);
+	}
+	
+	// Will return the average Levenshtein distance of the ordered name
+	// blocks, if one has more name blocks than the other it will not 
+	// contribute to the average
+	private double aveLev(Name rhs) {
+		EditDistance ed = new EditDistance();
+		double scoreSum = 0.0;
+		int numBlocks = Math.min(rhs.blocks.length, this.blocks.length);
+		
+		for (int i = 0; i < numBlocks; ++i) {
+			scoreSum += ed.score(this.blocks[i], rhs.blocks[i]);
+		}
+		return scoreSum / numBlocks;
+	}
+	
+	// Will return the Levenshtein distance of the ordered name blocks
+	// if one name has more blocks it WILL contribute to the edit distance
+	private double orderedLev(Name rhs) {
+		EditDistance ed = new EditDistance();
+		return ed.score(this.orderedBlocks, rhs.orderedBlocks);
+	}
+	
+	//-----------------------------------------
+
 	// Prints all comparison details 
 	public void printCompareStats(Name rhs) {
 		System.out.println(this.mainInstance + " : " + rhs.mainInstance);
@@ -391,7 +393,7 @@ public class Name {
 		compVals[5] = 0; //1 / (classicLev(rhs) + 1) * weights[5];
 		compVals[6] = 0; //1 / (initialLev(rhs) + 1) * weights[6];
 		compVals[7] = 0; //1 / (aveLev(rhs) + 1) * weights[7];
-		compVals[8] = 1 / (orderedLev(rhs) + 1) * weights[8];
+		compVals[8] = 0; //1 / (orderedLev(rhs) + 1) * weights[8];
 		compVals[9] = BBBSimilarityCompareison(rhs) * weights[9];
 		compVals[10] = substrInitials(rhs) * weights[10];
 		compVals[11] = commonInitials(rhs) * weights[11];
