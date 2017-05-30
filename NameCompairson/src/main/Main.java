@@ -1,7 +1,13 @@
 package main;
 
+// To do: fix clustering
+// heiarchacal clustering: not as important
+// Make a set of unitary tests 
+// Detect lists
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -93,28 +99,23 @@ public class Main {
 		}
 		
 		// Grabs names from wiki
-		String urlStr = args[0];
-		Document doc;
-		System.out.println("Grabbing elements");
-		do {
-			try {
-				doc = Jsoup.connect(urlStr).get();
-				Element nameAnchorDiv = doc.getElementById("mw-pages");
-				Elements nameAnchors = nameAnchorDiv.getElementsByTag("a");
-				
-				urlStr = null;
-				for (Element name : nameAnchors) {
-					if (name.text().equals("next page")) {
-						urlStr = "http://wiki.linked.earth" + name.attr("href");
-					} else if (!name.text().equals("previous page")) {
-						setOfNames.add(new Name(name.text(), "http://wiki.linked.earth" + name.attr("href")));
-					}
-				}
-				
-			} catch (IOException e1) {
-				e1.printStackTrace();
+		try {
+			FileReader nameSetFR = new FileReader(args[0]);
+			BufferedReader nameSetBR = new BufferedReader(nameSetFR);
+			
+			String inLine = null;
+			while ((inLine = nameSetBR.readLine()) != null) {
+				inLine = inLine.trim();
+				String url = "http://wiki.linked.earth/" + inLine.replace(" ", "_");
+				setOfNames.add(new Name(inLine, url));
 			}
-		} while (urlStr != null);
+			
+			nameSetBR.close();
+		} catch (FileNotFoundException e1) {
+			System.out.println("ERROR: file " + args[1] + " not found");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		System.out.println("Preprocessing");
 		
@@ -190,6 +191,7 @@ public class Main {
 		// End timer
 		long endTimePreprocess = System.nanoTime();
 		
+		System.out.println("Num elements: " + setOfNames.size());
 		System.out.println("Num preprocessed sets: " + namePreparedSets.size());
 		System.out.println("Num overlaping elements: " + overlappingNames.size());
 		

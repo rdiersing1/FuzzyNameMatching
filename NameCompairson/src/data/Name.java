@@ -9,6 +9,11 @@ import edu.stanford.nlp.util.EditDistance;
 
 import java.lang.Math;
 
+/**
+ * @author Robert
+ * The class that holds the string of a name along with much other preprocessed data
+ * that is able to compare two names.
+ */
 public class Name {
 	private String mainInstance;
 	private String initials;
@@ -44,6 +49,11 @@ public class Name {
 	private static final double BBBHARD_COMPARE_WEIGHT = 7;
 
 	// ASSUMES THAT NAMEDATA.JAVA HAS ALREADY BEEN INSTANTIATED 
+	
+	/**
+	 * @param s		The main instance of the name
+	 * @param link	The url link to the main page of the name
+	 */
 	public Name(String s, String link) {
 		this.link = link;
 		
@@ -51,6 +61,7 @@ public class Name {
 		mainInstance = s.toLowerCase();
 		mainInstance = mainInstance.replace(".", "");
 		mainInstance = mainInstance.replace(",", "");
+		mainInstance = mainInstance.trim();
 		
 		// Converts to name blocks
 		String[] tempBlocks;
@@ -125,13 +136,22 @@ public class Name {
 	// Comparison algorithms 
 	// All algorithms are not case sensitive
 	
-	// Will return 1.0 if the main instance is a strict match
+	
+	/**
+	 * @param rhs the name to compare
+	 * @return 1 iff rhs.mainInstance == this.mainInstance, 0 otherwise
+	 */
 	private double compareClassic(Name rhs) {
 		if (this.mainInstance.equalsIgnoreCase(rhs.mainInstance)) return 1.0;
 		return 0.0;
 	}
 	
-	// Will return 1.0 if the title strings match
+	
+	/**
+	 * @param rhs	the name to compare
+	 * @return		1.0 if the titles match, 0.5 if one has a title and the other doesn't
+	 * 				and 0 if the titles do not match
+	 */
 	private double compareTitles(Name rhs) {
 		if (this.title.length() == 0 && rhs.title.length() == 0) return 1.0;
 		if (this.title.length() == 0 || rhs.title.length() == 0) return 0.5;
@@ -139,13 +159,21 @@ public class Name {
 		return 0.0;
 	}
 	
-	// Will return 1.0 if the initals are the same even if out of order
+	
+	/**
+	 * @param rhs	the name to compare
+	 * @return		will return 1.0 if the initials combination is the same
+	 */
 	private double compareInitialsCombination(Name rhs) {
 		if (this.orderedInitials.equalsIgnoreCase(rhs.orderedInitials)) return 1.0;
 		return 0.0;
 	}
 	
-	// Will return the number of initials in common over the max number of initials
+	
+	/**
+	 * @param rhs	the name to compare
+	 * @return		will return the common initials / the total initials
+	 */
 	private double commonInitials(Name rhs) {
 		int index = 0;
 		int commonInitials = 0;
@@ -163,7 +191,11 @@ public class Name {
 		return  ( (double) commonInitials)/(Math.min(orderedInitials.length(), rhs.orderedInitials.length()));
 	}
 	
-	// returns 1 if the one of the initials is a substring of the other
+	
+	/**
+	 * @param rhs	the name to compare
+	 * @return		Will return 1 iff one of the initials are a substring of the other
+	 */
 	private double substrInitials(Name rhs) {
 		if (this.initials.contains(rhs.initials) && rhs.initials.length() > 0) {
 			return this.initials.length()/rhs.initials.length();
@@ -174,7 +206,13 @@ public class Name {
 		return 0.0;
 	}
 	
-	// compares two specific name blocks
+	
+	/**
+	 * @param lhs	one name block to compare
+	 * @param rhs	the other name block to compare
+	 * @return		will return a double 0.0-1.0 which signifies similarity between
+	 * 				the two blocks 
+	 */
 	public double compareBlock(String lhs, String rhs) {
 		
 		// Finds the edit distance
@@ -198,6 +236,10 @@ public class Name {
 	}
 	
 	// Block by block comparison 
+	/**
+	 * @param	rhs the name to compare
+	 * @return	a double 1-0 which represents comparisons between similar blocks
+	 */
 	private double BBBSimilarityCompareison(Name rhs) {
 		int similarNames = 0;
 		int similarNameSum = 0;
@@ -238,8 +280,11 @@ public class Name {
 		return score;
 	}
 	
-	// Does the exact same thing as BBBSimilarityCompareison except with a strict 
-	// comparison instead of a Levenshtein distance 
+	
+	/**
+	 * @param rhs	name to compare
+	 * @return		same as BBBCompare but with a strict compairson
+	 */
 	private double BBBStrictCompare(Name rhs) {
 		int sameNames = 0;
 		
@@ -260,7 +305,11 @@ public class Name {
 		return sameNames/((double) Math.min(totalNamesRhs, totalNamesLhs));
 	}
 	
-	// Will count name blocks that contain other name blocks
+	
+	/**
+	 * @param rhs	name to compare
+	 * @return		the number of same names over the number of total names
+	 */
 	private double BBBHardCompare(Name rhs) {
 		int sameNames = 0;
 		
@@ -279,7 +328,11 @@ public class Name {
 		return sameNames/((double) Math.min(totalNamesRhs, totalNamesLhs));
 	}
 	
-	// Co-author comparison
+	
+	/**
+	 * @param rhs	name to compare
+	 * @return returns the number of common coAuthors
+	 */
 	public double coAuthorCompare(Name rhs) {
 		int numInCommon = 0;
 		for (Name i : coauthors) {

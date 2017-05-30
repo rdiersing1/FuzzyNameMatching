@@ -1,216 +1,116 @@
 Matching Names
 
 1. 
-irina nja polovodova : http://wiki.linked.earth/Irina_NJA,_Polovodova
 jz nja khk : http://wiki.linked.earth/JZ_NJA,_KHK
-ally may nja : http://wiki.linked.earth/Ally_May_NJA
-and y shibata harada n n ahagon t sakamoto m uchida m ikehara : http://wiki.linked.earth/And_Y._Shibata._Harada,_N.,_N._Ahagon,_T._Sakamoto,_M._Uchida,_M._Ikehara
-nja : http://wiki.linked.earth/NJA
+mas khk : http://wiki.linked.earth/MAS_KHK
+hong yan khk : http://wiki.linked.earth/Hong_Yan_KHK
+cs khk : http://wiki.linked.earth/CS_KHK
+khk : http://wiki.linked.earth/KHK
 
 2. 
-qing sun : http://wiki.linked.earth/Qing_Sun
-sun : http://wiki.linked.earth/Sun
-and y shibata harada n n ahagon t sakamoto m uchida m ikehara : http://wiki.linked.earth/And_Y._Shibata._Harada,_N.,_N._Ahagon,_T._Sakamoto,_M._Uchida,_M._Ikehara
+wu : http://wiki.linked.earth/Wu
+wu kld : http://wiki.linked.earth/Wu_KLD
+cs mne : http://wiki.linked.earth/CS_MNE
+henry wu : http://wiki.linked.earth/Henry_Wu
+hlf mne : http://wiki.linked.earth/HLF_MNE
+stevenson kld : http://wiki.linked.earth/Stevenson_KLD
+kld cs : http://wiki.linked.earth/KLD_CS
+mne : http://wiki.linked.earth/MNE
+kld : http://wiki.linked.earth/KLD
+henry wu mne : http://wiki.linked.earth/Henry_Wu_MNE
+wu kja : http://wiki.linked.earth/Wu_KJA
+hvm mne : http://wiki.linked.earth/HVM_MNE
+wu kld mne : http://wiki.linked.earth/Wu_KLD,_MNE
+jt henry wu : http://wiki.linked.earth/JT_Henry_Wu
+hc wu : http://wiki.linked.earth/H.C_Wu
 
 3. 
+gl pgm : http://wiki.linked.earth/GL_PGM
+pgm : http://wiki.linked.earth/PGM
+jaa : http://wiki.linked.earth/JAA
+pgm jaa : http://wiki.linked.earth/PGM_JAA
+
+4. 
+jz : http://wiki.linked.earth/JZ
+jz nja khk : http://wiki.linked.earth/JZ_NJA,_KHK
+nja : http://wiki.linked.earth/NJA
+ally may nja : http://wiki.linked.earth/Ally_May_NJA
+jz cs : http://wiki.linked.earth/JZ_CS
+
+5. 
+quinn : http://wiki.linked.earth/Quinn
+tm quinn : http://wiki.linked.earth/T.M_Quinn
+tm quinn : http://wiki.linked.earth/T.M._Quinn
+
+6. 
+youbin sun : http://wiki.linked.earth/Youbin_Sun
+sun : http://wiki.linked.earth/Sun
+qing sun : http://wiki.linked.earth/Qing_Sun
+y sun : http://wiki.linked.earth/Y._Sun
+
+7. 
+mas : http://wiki.linked.earth/MAS
+mas khk : http://wiki.linked.earth/MAS_KHK
+
+8. 
 ocean2k saenger : http://wiki.linked.earth/Ocean2k_Saenger
 ocean2k : http://wiki.linked.earth/Ocean2k
 
-4. 
-s stott l cannariato k thunell r haug gh koutavas a and lund : http://wiki.linked.earth/S._Stott,_L.,_Cannariato,_K.,_Thunell,_R.,_Haug,_G.H.,_Koutavas,_A.,_and_Lund
-braddock k linsley : http://wiki.linked.earth/Braddock_K._Linsley
-bk linsley : http://wiki.linked.earth/B.K._Linsley
-linsley : http://wiki.linked.earth/Linsley
-
-5. 
-cs jackson : http://wiki.linked.earth/C.S._Jackson
-cs mne : http://wiki.linked.earth/CS_MNE
-cs : http://wiki.linked.earth/CS
-horton cs : http://wiki.linked.earth/Horton_CS
-kld cs : http://wiki.linked.earth/KLD_CS
-jz cs : http://wiki.linked.earth/JZ_CS
-cs khk : http://wiki.linked.earth/CS_KHK
-
-6. 
-lj king jc and graumlich : http://wiki.linked.earth/L.J._King,_J.C._and_Graumlich
-lj king jc and waggoner la and graumlich : http://wiki.linked.earth/L.J._King,_J.C._and_Waggoner,_L.A._and_Graumlich
-jc king : http://wiki.linked.earth/J.C._King
-
-7. 
-jt henry wu : http://wiki.linked.earth/JT_Henry_Wu
-wu kld : http://wiki.linked.earth/Wu_KLD
-will carpenter henry wu : http://wiki.linked.earth/Will_Carpenter_Henry_Wu
-r harlan t and candova m and reines dl and wu : http://wiki.linked.earth/R_Harlan._T._and_Candova,_M._and_Reines,_D.L._and_Wu
-thorsten kiefer henry wu : http://wiki.linked.earth/Thorsten_Kiefer_Henry_Wu
-wu kja : http://wiki.linked.earth/Wu_KJA
-hc wu : http://wiki.linked.earth/H.C_Wu
-wu kld mne : http://wiki.linked.earth/Wu_KLD,_MNE
-r harlan t and canova m and reines dl and wu : http://wiki.linked.earth/R._Harlan,_T._and_Canova,_M._and_Reines,_D.L._and_Wu
-henry wu mne : http://wiki.linked.earth/Henry_Wu_MNE
-wu : http://wiki.linked.earth/Wu
-henry wu : http://wiki.linked.earth/Henry_Wu
-
-8. 
-jz nja khk : http://wiki.linked.earth/JZ_NJA,_KHK
-mas khk : http://wiki.linked.earth/MAS_KHK
-triranta khk sircar : http://wiki.linked.earth/Triranta_KHK,_Sircar
-khk : http://wiki.linked.earth/KHK
-hong yan khk : http://wiki.linked.earth/Hong_Yan_KHK
-jz cs : http://wiki.linked.earth/JZ_CS
-jz : http://wiki.linked.earth/JZ
-cs khk : http://wiki.linked.earth/CS_KHK
-
 9. 
-rm : http://wiki.linked.earth/RM
-l brown pm and woodhouse ca and hughes mk and joyce : http://wiki.linked.earth/L._Brown,_P.M._and_Woodhouse,_C.A._and_Hughes,_M.K._and_Joyce
-moustafa : http://wiki.linked.earth/Moustafa
-s stott l cannariato k thunell r haug gh koutavas a and lund : http://wiki.linked.earth/S._Stott,_L.,_Cannariato,_K.,_Thunell,_R.,_Haug,_G.H.,_Koutavas,_A.,_and_Lund
-r harlan t and candova m and reines dl and wu : http://wiki.linked.earth/R_Harlan._T._and_Candova,_M._and_Reines,_D.L._and_Wu
-g darrigo r and wilson r and jacoby : http://wiki.linked.earth/G._DArrigo,_R_and_Wilson,_R._and_Jacoby
-wanamaker : http://wiki.linked.earth/Wanamaker
-r darrigo and e mashig and d frank and r wilson and g jacoby : http://wiki.linked.earth/R._DArrigo_and_E._Mashig_and_D._Frank_and_R._Wilson_and_G._Jacoby
-celia and corella : http://wiki.linked.earth/Celia_and_Corella
-mt : http://wiki.linked.earth/MT
-carlos and cacho : http://wiki.linked.earth/Carlos_and_Cacho
-abram : http://wiki.linked.earth/Abram
-r harlan t and canova m and reines dl and wu : http://wiki.linked.earth/R._Harlan,_T._and_Canova,_M._and_Reines,_D.L._and_Wu
-and y shibata harada n n ahagon t sakamoto m uchida m ikehara : http://wiki.linked.earth/And_Y._Shibata._Harada,_N.,_N._Ahagon,_T._Sakamoto,_M._Uchida,_M._Ikehara
-haase-schramm : http://wiki.linked.earth/Haase-Schramm
-williamrgray : http://wiki.linked.earth/Williamrgray
-
-10. 
-tm quinn : http://wiki.linked.earth/T.M_Quinn
-tm quinn : http://wiki.linked.earth/T.M._Quinn
-quinn : http://wiki.linked.earth/Quinn
-
-11. 
-ejs jww : http://wiki.linked.earth/EJS_JWW
-ejs : http://wiki.linked.earth/EJS
-
-12. 
-s stott l cannariato k thunell r haug gh koutavas a and lund : http://wiki.linked.earth/S._Stott,_L.,_Cannariato,_K.,_Thunell,_R.,_Haug,_G.H.,_Koutavas,_A.,_and_Lund
-kilbourne : http://wiki.linked.earth/Kilbourne
-k halimeda kilbourne : http://wiki.linked.earth/K._Halimeda_Kilbourne
-
-13. 
-gc : http://wiki.linked.earth/GC
-g jacoby gc and darrigo r and wiles : http://wiki.linked.earth/G._Jacoby,_G.C._and_DArrigo,_R._and_Wiles
-gc darrigo rd and wilson rjs and jacoby : http://wiki.linked.earth/G.C._DArrigo,_R.D._and_Wilson,_R.J.S._and_Jacoby
-g jacoby gc and davi n and wiles : http://wiki.linked.earth/G._Jacoby,_G.C._and_Davi,_N._and_Wiles
-
-14. 
-henning kuhnert : http://wiki.linked.earth/Henning_Kuhnert
-s stott l cannariato k thunell r haug gh koutavas a and lund : http://wiki.linked.earth/S._Stott,_L.,_Cannariato,_K.,_Thunell,_R.,_Haug,_G.H.,_Koutavas,_A.,_and_Lund
-kuhnert : http://wiki.linked.earth/Kuhnert
-h kuhnert : http://wiki.linked.earth/H._Kuhnert
-
-15. 
-cs mne : http://wiki.linked.earth/CS_MNE
-mne : http://wiki.linked.earth/MNE
-hvm mne : http://wiki.linked.earth/HVM_MNE
-hlf mne : http://wiki.linked.earth/HLF_MNE
-wu kld mne : http://wiki.linked.earth/Wu_KLD,_MNE
-henry wu mne : http://wiki.linked.earth/Henry_Wu_MNE
-and y shibata harada n n ahagon t sakamoto m uchida m ikehara : http://wiki.linked.earth/And_Y._Shibata._Harada,_N.,_N._Ahagon,_T._Sakamoto,_M._Uchida,_M._Ikehara
-
-16. 
-n wiles g and jacoby g and davi : http://wiki.linked.earth/N._Wiles,_G._and_Jacoby,_G._and_Davi
-s stott l cannariato k thunell r haug gh koutavas a and lund : http://wiki.linked.earth/S._Stott,_L.,_Cannariato,_K.,_Thunell,_R.,_Haug,_G.H.,_Koutavas,_A.,_and_Lund
-r wiles g and jarvis s and darrigo : http://wiki.linked.earth/R._Wiles,_G._and_Jarvis,_S._and_DArrigo
-g darrigo r and wilson r and jacoby : http://wiki.linked.earth/G._DArrigo,_R_and_Wilson,_R._and_Jacoby
-r darrigo and e mashig and d frank and r wilson and g jacoby : http://wiki.linked.earth/R._DArrigo_and_E._Mashig_and_D._Frank_and_R._Wilson_and_G._Jacoby
-guilderson : http://wiki.linked.earth/Guilderson
-
-17. 
-hl jb : http://wiki.linked.earth/HL_JB
-jb : http://wiki.linked.earth/JB
-
-18. 
-mf bs : http://wiki.linked.earth/MF_BS
-bs : http://wiki.linked.earth/BS
-bs jj : http://wiki.linked.earth/BS_JJ
-mf bs mb mirs : http://wiki.linked.earth/MF_BS,_MB,_MirS
-
-19. 
-n wiles g and jacoby g and davi : http://wiki.linked.earth/N._Wiles,_G._and_Jacoby,_G._and_Davi
-delong : http://wiki.linked.earth/DeLong
-r darrigo and e mashig and d frank and r wilson and g jacoby : http://wiki.linked.earth/R._DArrigo_and_E._Mashig_and_D._Frank_and_R._Wilson_and_G._Jacoby
-
-20. 
-kld : http://wiki.linked.earth/KLD
-wu kld : http://wiki.linked.earth/Wu_KLD
-s stott l cannariato k thunell r haug gh koutavas a and lund : http://wiki.linked.earth/S._Stott,_L.,_Cannariato,_K.,_Thunell,_R.,_Haug,_G.H.,_Koutavas,_A.,_and_Lund
-wu kld mne : http://wiki.linked.earth/Wu_KLD,_MNE
-kld cs : http://wiki.linked.earth/KLD_CS
-stevenson kld : http://wiki.linked.earth/Stevenson_KLD
-
-21. 
-ve kja : http://wiki.linked.earth/VE_KJA
-ve : http://wiki.linked.earth/VE
-
-22. 
-nakamura : http://wiki.linked.earth/Nakamura
-s stott l cannariato k thunell r haug gh koutavas a and lund : http://wiki.linked.earth/S._Stott,_L.,_Cannariato,_K.,_Thunell,_R.,_Haug,_G.H.,_Koutavas,_A.,_and_Lund
-mg : http://wiki.linked.earth/MG
-to : http://wiki.linked.earth/TO
-mss : http://wiki.linked.earth/MSS
-nab : http://wiki.linked.earth/NAB
-mss hui jiang : http://wiki.linked.earth/MSS_Hui_Jiang
-r darrigo and e mashig and d frank and r wilson and g jacoby : http://wiki.linked.earth/R._DArrigo_and_E._Mashig_and_D._Frank_and_R._Wilson_and_G._Jacoby
-adm : http://wiki.linked.earth/ADM
-hvm mne : http://wiki.linked.earth/HVM_MNE
-mas khk : http://wiki.linked.earth/MAS_KHK
-a csank : http://wiki.linked.earth/A._Csank
-mas : http://wiki.linked.earth/MAS
-asami : http://wiki.linked.earth/Asami
-hvm : http://wiki.linked.earth/HVM
-and y shibata harada n n ahagon t sakamoto m uchida m ikehara : http://wiki.linked.earth/And_Y._Shibata._Harada,_N.,_N._Ahagon,_T._Sakamoto,_M._Uchida,_M._Ikehara
-urban : http://wiki.linked.earth/Urban
-
-23. 
-l brown pm and woodhouse ca and hughes mk and joyce : http://wiki.linked.earth/L._Brown,_P.M._and_Woodhouse,_C.A._and_Hughes,_M.K._and_Joyce
-s stott l cannariato k thunell r haug gh koutavas a and lund : http://wiki.linked.earth/S._Stott,_L.,_Cannariato,_K.,_Thunell,_R.,_Haug,_G.H.,_Koutavas,_A.,_and_Lund
-linkedearth : http://wiki.linked.earth/LinkedEarth
-charles : http://wiki.linked.earth/Charles
-swart : http://wiki.linked.earth/Swart
-calvo : http://wiki.linked.earth/Calvo
-ks : http://wiki.linked.earth/KS
-
-24. 
-pgm jaa : http://wiki.linked.earth/PGM_JAA
-pgm : http://wiki.linked.earth/PGM
-jaa : http://wiki.linked.earth/JAA
-gl pgm : http://wiki.linked.earth/GL_PGM
-
-25. 
 gl : http://wiki.linked.earth/GL
 gl pgm : http://wiki.linked.earth/GL_PGM
 
-26. 
-l lisiecki : http://wiki.linked.earth/L._Lisiecki
-lorraine e lisiecki : http://wiki.linked.earth/Lorraine_E._Lisiecki
+10. 
+bs jj : http://wiki.linked.earth/BS_JJ
+bs : http://wiki.linked.earth/BS
+mf bs mb mirs : http://wiki.linked.earth/MF_BS,_MB,_MirS
+mf bs : http://wiki.linked.earth/MF_BS
 
-27. 
-ert : http://wiki.linked.earth/ERT
-r rendle-bühring : http://wiki.linked.earth/R._Rendle-B%C3%BChring.
-druffel : http://wiki.linked.earth/Druffel
-draschba : http://wiki.linked.earth/Draschba
-juillet-leclerc : http://wiki.linked.earth/Juillet-Leclerc
-darrell : http://wiki.linked.earth/Darrell
-dunbar : http://wiki.linked.earth/Dunbar
-jr : http://wiki.linked.earth/JR
-r darrigo and e mashig and d frank and r wilson and g jacoby : http://wiki.linked.earth/R._DArrigo_and_E._Mashig_and_D._Frank_and_R._Wilson_and_G._Jacoby
+11. 
+horton cs : http://wiki.linked.earth/Horton_CS
+cs : http://wiki.linked.earth/CS
+cs mne : http://wiki.linked.earth/CS_MNE
+kld cs : http://wiki.linked.earth/KLD_CS
+cs khk : http://wiki.linked.earth/CS_KHK
+jz cs : http://wiki.linked.earth/JZ_CS
+cs jackson : http://wiki.linked.earth/C.S._Jackson
 
-28. 
-felis : http://wiki.linked.earth/Felis
-thomas felis : http://wiki.linked.earth/Thomas_Felis
+12. 
+jb : http://wiki.linked.earth/JB
+hl jb : http://wiki.linked.earth/HL_JB
 
-29. 
-hlf : http://wiki.linked.earth/HLF
+13. 
 hlf mne : http://wiki.linked.earth/HLF_MNE
+hlf : http://wiki.linked.earth/HLF
 
-30. 
-francesco s r pausata : http://wiki.linked.earth/Francesco_S._R._Pausata
-fsr pausata : http://wiki.linked.earth/F.S.R._Pausata
+14. 
+mss : http://wiki.linked.earth/MSS
+mss hui jiang : http://wiki.linked.earth/MSS_Hui_Jiang
+
+15. 
+linsley : http://wiki.linked.earth/Linsley
+bk linsley : http://wiki.linked.earth/B.K._Linsley
+braddock k linsley : http://wiki.linked.earth/Braddock_K._Linsley
+
+16. 
+ejs jww : http://wiki.linked.earth/EJS_JWW
+ejs : http://wiki.linked.earth/EJS
+
+17. 
+h kuhnert : http://wiki.linked.earth/H._Kuhnert
+kuhnert : http://wiki.linked.earth/Kuhnert
+henning kuhnert : http://wiki.linked.earth/Henning_Kuhnert
+
+18. 
+hvm mne : http://wiki.linked.earth/HVM_MNE
+hvm : http://wiki.linked.earth/HVM
+
+19. 
+thomas felis : http://wiki.linked.earth/Thomas_Felis
+felis : http://wiki.linked.earth/Felis
+
+20. 
+ve kja : http://wiki.linked.earth/VE_KJA
+ve : http://wiki.linked.earth/VE
 
 
