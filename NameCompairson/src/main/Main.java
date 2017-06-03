@@ -72,12 +72,13 @@ public class Main {
 		BufferedWriter out = null;
 		
 		Set<Name> setOfNames = new HashSet<>();
+		Set<Name> setOfLists = new HashSet<>();
 		Map<Name, Integer> namesToClusters = new HashMap<>();
-		Map<Set<Name>, Double> nameCompairsons = new HashMap<>();
 		ArrayList<Set> nameClusters = new ArrayList<>();
 		
 		Map<Set<Character>, Set<Name>> namePreparedSets= new HashMap<>(); 
-		Map<Name, Set<Set<Name>>> overlappingNamesToSets = new HashMap<>();
+		Map<Set<Name>, Double> nameCompairsons = new HashMap<>();
+		
 		Set<Name> overlappingNames = new HashSet<>();
 		
 		try {
@@ -107,7 +108,12 @@ public class Main {
 			while ((inLine = nameSetBR.readLine()) != null) {
 				inLine = inLine.trim();
 				String url = "http://wiki.linked.earth/" + inLine.replace(" ", "_");
-				setOfNames.add(new Name(inLine, url));
+				Name newName = new Name(inLine, url);
+				if (newName.isList()) {
+					setOfLists.add(newName);
+				} else {
+					setOfNames.add(newName);
+				}
 			}
 			
 			nameSetBR.close();
@@ -166,25 +172,13 @@ public class Main {
 		for (Name n : overlappingNames) {
 			
 			String initials = n.getInitials();
-			boolean valid = false;
 			for (Map.Entry<Set<Character>, Set<Name>> entry : namePreparedSets.entrySet()) {
 				for (int i = 0; i < initials.length(); ++i) {
 					if (entry.getKey().contains(initials.charAt(i))) {
-						valid = true;
-						if (overlappingNamesToSets.containsKey(n)) {
-							overlappingNamesToSets.get(n).add(entry.getValue());
-						} else {
-							Set<Set<Name>> s = new HashSet<>();
-							s.add(entry.getValue());
-							overlappingNamesToSets.put(n, s);
-						}
+						entry.getValue().add(n);
 						break;
 					}
 				}
-			}
-			
-			if (!valid) {
-				System.out.println("WARNING VALID IS FALSE FOR NAME " + n.getMainInstance());
 			}
 		}
 		
@@ -207,20 +201,6 @@ public class Main {
 		
 		int numCompairsons = 0;
 		// Compare Names
-		for (Name n1 : overlappingNames) {
-			for (Set<Name> nSet : overlappingNamesToSets.get(n1)) {
-				for (Name n2 : nSet) {
-					Set<Name> namesToCompare = new HashSet<>();
-					namesToCompare.add(n1);
-					namesToCompare.add(n2);
-					if (!nameCompairsons.containsKey(namesToCompare)) {
-						++numCompairsons;
-						nameCompairsons.put(namesToCompare, n1.compare(n2));
-					}
-				}
-			}
-		}
-		
 		for (Set<Name> nSet : namePreparedSets.values()) {
 			for (Name n1 : nSet) {
 				for (Name n2 : nSet) {
@@ -244,51 +224,25 @@ public class Main {
 		long startTimeCluster = System.nanoTime();
 		
 		// Cluster
-		for (Name n1 : overlappingNames) {
-			if (!namesToClusters.containsKey(n1)) {
-				Set<Name> cluster = new HashSet<>();
-				cluster.add(n1);
-				for (Set<Name> nSet : overlappingNamesToSets.get(n1)) {
-					for (Name n2 : nSet) {
-						Set<Name> namesToCompare = new HashSet<>();
-						namesToCompare.add(n1);
-						namesToCompare.add(n2);
-						if (nameCompairsons.get(namesToCompare) > Name.FULL_SIMILARITY_MINIMUM) {
-							if (!namesToClusters.containsKey(n2)) {
-								cluster.add(n2);
-							} else {
-								int i = namesToClusters.get(n2);
-								nameClusters.get(i).add(n1);
-							}
-						}
-					}
-				}
-				nameClusters.add(cluster);
-				namesToClusters.put(n1, nameClusters.size() - 1);
-				for (Name n2 : cluster) {
-					namesToClusters.put(n2, nameClusters.size() - 1);
-				}
-			}
-		}
-		
+		Set<Name> clusteredNames = new HashSet<>();
 		for(Set<Name> nSet : namePreparedSets.values()) {
 			for (Name n1 : nSet) {
-				if (!nameClusters.contains(n1)) {
+				if (!clusteredNames.contains(n1)) {
 					Set<Name> cluster = new HashSet<>();
 					cluster.add(n1);
+					clusteredNames.add(n1);
 					for (Name n2 : nSet) {
 						Set<Name> namesToCompare = new HashSet<>();
 						namesToCompare.add(n1);
 						namesToCompare.add(n2);
-						if (nameCompairsons.get(namesToCompare) > Name.FULL_SIMILARITY_MINIMUM) {
-							if (!namesToClusters.containsKey(n2)) {
+						if (!clusteredNames.contains(n2)) {
+							if (nameCompairsons.get(namesToCompare) > Name.FULL_SIMILARITY_MINIMUM) {
 								cluster.add(n2);
-							} else {
-								int i = namesToClusters.get(n2);
-								nameClusters.get(i).add(n1);
+								clusteredNames.add(n2);
 							}
 						}
 					}
+					nameClusters.add(cluster);
 				}
 			}
 		}
@@ -297,7 +251,7 @@ public class Main {
 		long endTimeCluster = System.nanoTime();
 		
 		try {
-			out.write("Matching Names\n\n");
+			out.write("Matching Names New \n\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -308,7 +262,7 @@ public class Main {
 				if (nSet.size() > 1) {
 					out.write(j + ". \n"); ++j;
 					for (Name n : nSet) {
-						out.write(n.getMainInstance() + " : " + n.getLink() + "\n");
+						out.write(n.getOrigonalInstance() + " : " + n.getLink() + "\n");
 					}
 					out.write("\n");
 				}
@@ -332,5 +286,8 @@ public class Main {
 		System.out.println("Comparison runtime: " + runTimeCompareMS + "ms");
 		System.out.println("Runtime per compairson: " + runTimePerCompUS + "us");
 		System.out.println("Clustering runtime: " + runTimeClusterMS + "ms");
+		
+		System.out.println("Compairing Jessica Tierney and J.E. Tierney: "); 
+		new Name("J.E. Tierney", "").printCompareStats(new Name("Jessica Tierney", ""));
 	}
 }

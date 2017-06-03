@@ -16,6 +16,7 @@ import java.lang.Math;
  */
 public class Name {
 	private String mainInstance;
+	private String origonalInstance;
 	private String initials;
 	private String orderedInitials;
 	private String orderedBlocksStr;
@@ -56,11 +57,13 @@ public class Name {
 	 */
 	public Name(String s, String link) {
 		this.link = link;
+		this.origonalInstance = s;
 		
 		// converts to lowercase and removes caps
 		mainInstance = s.toLowerCase();
-		mainInstance = mainInstance.replace(".", "");
-		mainInstance = mainInstance.replace(",", "");
+		mainInstance = mainInstance.replace(".", " ");
+		mainInstance = mainInstance.replace(",", " ");
+		mainInstance = mainInstance.replaceAll("\\s+", " ");
 		mainInstance = mainInstance.trim();
 		
 		// Converts to name blocks
@@ -125,12 +128,21 @@ public class Name {
 		return mainInstance;
 	}
 	
+	public String getOrigonalInstance() {
+		return origonalInstance;
+	}
+	
 	public String getLink() {
 		return link;
 	}
 	
 	public String getInitials() {
 		return initials;
+	}
+	
+	// Other methods
+	public boolean isList() {
+		return blocks.length > 4;
 	}
 	
 	// Comparison algorithms 
@@ -325,7 +337,7 @@ public class Name {
 			}
 		}
 		
-		return sameNames/((double) Math.min(totalNamesRhs, totalNamesLhs));
+		return sameNames/((double) Math.max(totalNamesRhs, totalNamesLhs));
 	}
 	
 	
